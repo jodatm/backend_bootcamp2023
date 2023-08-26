@@ -19,10 +19,10 @@
    flask shell
    ```
 
-4. Importar y ejecutar el script de migración:
+3-1. Importar y ejecutar el script de migración:
 
    ```python
-   from models import Task
+   from models import CheckList
    from config import db
    db.create_all()
    ```
@@ -36,7 +36,7 @@
 
    Sin embargo, esta acción borrará todas las tablas. Por eso, es recomendable trabajar con Flask-Migrate para migraciones más controladas. Puedes encontrar información en [este enlace](https://flask-migrate.readthedocs.io/en/latest/index.html).
 
-5. Instalar Flask-Migrate y ejecutar los comandos:
+3-2. Instalar Flask-Migrate y ejecutar los comandos:
 
    - Instala Flask-Migrate:
 
@@ -61,9 +61,18 @@
      flask db upgrade
      ```
 
-6. Librerías necesarias:
+4. Librerías necesarias:
 
   ```bash
-   pip install -r requirements.txt
+  virtualenv env
+  cd env/Scripts
+  activate
+  cd ../..
+  pip install -r requirements.txt
   ```
 
+5. Ejecutar proyecto:
+
+  ```bash
+   python main.py
+  ```
