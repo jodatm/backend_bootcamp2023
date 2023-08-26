@@ -1,13 +1,8 @@
+# Configuración del backend bootcamp Gorillalogic 2023 Cali
+
 # Crear la base de datos:
 
-1. Instalar la DB con docker compose:
-
-en el folder backend corre el siguiente comando
-
-     docker-compose up
-
-
-2. Definir la variable de entorno `FLASK_APP`:
+1. Definir la variable de entorno `FLASK_APP`:
 
    - En sistemas Unix/Linux/macOS:
      ```bash
@@ -18,7 +13,7 @@ en el folder backend corre el siguiente comando
      set FLASK_APP=main
      ```
 
-3. Ejecutar el shell de Flask:
+2. Ejecutar el shell de Flask:
 
    ```bash
    flask shell
@@ -65,20 +60,3 @@ en el folder backend corre el siguiente comando
      ```bash
      flask db upgrade
      ```
-
-Librerías necesarias:
-
-- Instala las siguientes librerías:
-  ```bash
-  pip install Flask-Migrate
-  pip install flask_marshmallow
-  pip install marshmallow-sqlalchemy
-  pip install Flask-CORS
-  pip install psycopg2-binary
-  ```
-
-  tambien puedes instalar todas las dependencias corriendo:
-  ```bash
-   pip install -r requirements.txt
-  ```
-
