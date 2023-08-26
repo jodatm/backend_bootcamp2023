@@ -8,6 +8,13 @@ from models import Task, task_schema
 from models import CheckList, check_list_schema
 from api_control import taskCtrlr, taskDto, createTaskCommand, updateTaskCommand
 from api_control import listCtrlr, listDto, createListCommand, updateListCommand
+from api_control import langchainCtrlr, createlangChainCommand
+
+from langchain.llms import OpenAI
+from langchain.prompts import PromptTemplate
+from langchain.llms import OpenAI
+from langchain.schema import BaseOutputParser
+from langchain.chains import LLMChain
 
 # Crea el blueprint de la aplicación
 blueprint = Blueprint('api', __name__, url_prefix='/api')
@@ -157,3 +164,49 @@ class Todo(Resource):
             listCtrlr.abort(404, f"Task with id {id} does not exist")
     
 api.add_namespace(taskCtrlr)
+
+@langchainCtrlr.route("/")
+class SendTaskToLangChain(Resource):
+    @langchainCtrlr.expect(createlangChainCommand)
+    def post(self):        
+        payload = langchainCtrlr.payload                
+        
+        class CommaSeparatedListOutputParser(BaseOutputParser):
+            """Parse the output of an LLM call to a comma-separated list."""
+
+
+            def parse(self, text: str):
+                """Parse the output of an LLM call."""
+                return text.strip().split(", ")
+        
+        llm = OpenAI(openai_api_key=os.environ.get("SECRET_KEY_OPENAI"))        
+        template = """Eres un asistente que genera una lista sin numeracion separada por comas.
+        La cantidad maxima de elementos por lista es de 10.
+        Los elementos de la lista deben estar ordenados.        
+        Imagina que eres un expero en un productividad dentro de tres
+        asteristicos vamos a escribirte el titulo de una lista de tareas y quiero que
+        me digas que actividades debo realizar para completarla. 
+        ***
+        {data}
+        ***
+        """
+        prompt = PromptTemplate.from_template(template)
+        
+        prompt.format(data=payload["prompt"])
+        list = llm.predict(prompt.format(data=payload["prompt"])).strip().split(", ")
+        
+        newList = CheckList(title=payload["prompt"])
+        db.session.add(newList)
+        db.session.commit()
+        
+        order = 1
+        for task in list:
+            newTask = Task(value=task, order=order,
+                 completed=False, list_id=newList.id)
+            order +=1
+            db.session.add(newTask)
+            db.session.commit()
+        return make_response(f"List created successfully", 200)
+        
+        
+api.add_namespace(langchainCtrlr)
