@@ -13,16 +13,21 @@
      set FLASK_APP=main
      ```
 
-2. Ejecutar el shell de Flask:
+2. Librerías necesarias:
+
+  ```bash
+  virtualenv env
+  cd env/Scripts
+  activate
+  cd ../..
+  pip install -r requirements.txt
+  ```
+
+3-1. Importar y ejecutar el script de migración:
 
    ```bash
    flask shell
-   ```
-
-4. Importar y ejecutar el script de migración:
-
-   ```python
-   from models import Task
+   from models import CheckList
    from config import db
    db.create_all()
    ```
@@ -36,13 +41,7 @@
 
    Sin embargo, esta acción borrará todas las tablas. Por eso, es recomendable trabajar con Flask-Migrate para migraciones más controladas. Puedes encontrar información en [este enlace](https://flask-migrate.readthedocs.io/en/latest/index.html).
 
-5. Instalar Flask-Migrate y ejecutar los comandos:
-
-   - Instala Flask-Migrate:
-
-     ```bash
-     pip install Flask-Migrate
-     ```
+3-2. Instalar Flask-Migrate y ejecutar los comandos:
 
    - Inicializa las migraciones:
 
@@ -59,10 +58,16 @@
    - Ejecuta la migración en la base de datos:
      ```bash
      flask db upgrade
-     
-6. Librerías necesarias:
+     ```
+
+4. Ejecutar proyecto:
 
   ```bash
-   pip install -r requirements.txt
+   python main.py
   ```
+5. Crear un archivo .env en el proyecto con este contenido:
 
+  ```bash
+   SECRET_KEY_OPENAI=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
+   secret_key = os.environ.get("SECRET_KEY_OPENAI")
+  ```
