@@ -59,4 +59,10 @@
    - Ejecuta la migración en la base de datos:
      ```bash
      flask db upgrade
-     ```
+     
+6. Librerías necesarias:
+
+  ```bash
+   pip install -r requirements.txt
+  ```
+
